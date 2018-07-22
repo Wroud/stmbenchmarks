@@ -2,7 +2,7 @@ import { createStore } from "redux";
 import { createSelector } from "reselect";
 import { counterReducer, deepCounterReducer, modifyReducer, normalizedReducer } from "./reduxReducers";
 
-export const reduxSuite = ({ variables: { normalizedCount }, initState, helpers: { createHeavySubscriber } }) => {
+export const reduxSuite = ({ variables: { normalizedCount, subscriberImpact }, initState, helpers: { createHeavySubscriber } }) => {
     const initStore = reducer => {
         const store = createStore(reducer);
         store.subscribe(() => { });
@@ -71,15 +71,13 @@ export const reduxSuite = ({ variables: { normalizedCount }, initState, helpers:
                 name: "normalized with subscribers",
                 bench() {
                     const store = createStore(normalizedReducer(initState.normalized()));
-                    const { heavySubscriber } = createHeavySubscriber();
+                    const { heavySubscriber } = createHeavySubscriber(subscriberImpact);
 
                     const add = id => ({ type: "add", payload: { id, text: "some news text" + id } });
                     const mod = id => ({ type: "modify", payload: { id, text: Math.random().toString() } });
-                    const newsSelector = createSelector((state: any) => state.news, _ => _);
                     for (let i = 0; i < normalizedCount; i++) {
                         store.dispatch(add(i));
-                        const itemSelector = createSelector(newsSelector, news => news[i]);
-                        const memorizedSubcriber = createSelector(itemSelector, heavySubscriber);
+                        const memorizedSubcriber = createSelector((state: any) => state.news[i], heavySubscriber);
                         store.subscribe(() => memorizedSubcriber(store.getState()));
                     }
                     return () => {

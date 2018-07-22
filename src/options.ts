@@ -26,7 +26,8 @@ export const initNormalizedState = (): INormalizedState => ({
 
 export const optionsDefault = {
     variables: {
-        normalizedCount: 5
+        normalizedCount: 5,
+        subscriberImpact: 1000
     },
     helpers: {
         createHeavySubscriber

@@ -1,7 +1,7 @@
 import { createStore, createSchema, createScope, Path } from "reistore";
 import { InstructionType } from "reistore/lib/enums/InstructionType";
 
-export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpers: { createHeavySubscriber } }) => {
+export const reistoreSuite = ({ variables: { normalizedCount, subscriberImpact }, initState, helpers: { createHeavySubscriber } }) => {
     const initStore = (state) => {
         return createStore(createSchema({ ...state }))
             .subscribe(() => { });
@@ -142,7 +142,7 @@ export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpe
                     const store = createStore(schemaNormalized)
                         .subscribe(() => { });
 
-                    const { heavySubscriber } = createHeavySubscriber();
+                    const { heavySubscriber } = createHeavySubscriber(subscriberImpact);
                     store.batch(batch => {
                         for (let i = 0; i < normalizedCount; i++) {
                             batch.add(newsArgPath, { id: i, text: "some news text" + i }, i);
