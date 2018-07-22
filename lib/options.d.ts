@@ -1,7 +1,7 @@
 import { INormalizedState, IDeepCounterState, ICounterState } from "./interfaces/IState";
-export declare const initCounterStore: ICounterState;
-export declare const deepState: IDeepCounterState;
-export declare const initNormalizedState: INormalizedState;
+export declare const initCounterStore: () => ICounterState;
+export declare const deepState: () => IDeepCounterState;
+export declare const initNormalizedState: () => INormalizedState;
 export declare const optionsDefault: {
     variables: {
         normalizedCount: number;
@@ -13,8 +13,8 @@ export declare const optionsDefault: {
         };
     };
     initState: {
-        counter: ICounterState;
-        deepCounter: IDeepCounterState;
-        normalized: INormalizedState;
+        counter: () => ICounterState;
+        deepCounter: () => IDeepCounterState;
+        normalized: () => INormalizedState;
     };
 };
