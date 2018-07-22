@@ -41,17 +41,18 @@
   "publishConfig": {
     "tag": "latest"
   },
-  "dependencies": {},
+  "dependencies": {
+    "effector": "^0.18.0-beta.8",
+    "redux": "*",
+    "reistore": "1.2.2"
+  },
   "devDependencies": {
     "@types/node": "^10.3.4",
     "@types/benchmark": "^1.0.31",
-    "effector": "^0.18.0-beta.8",
-    "redux": "*",
     "ts-node": "^5.0.1",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2",
     "reselect": "3.0.1",
-    "benchmark": "^2.1.4",
-    "reistore": "1.2.2"
+    "benchmark": "^2.1.4"
   }
 }
