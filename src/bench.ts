@@ -20,8 +20,16 @@ export function runBenchmark<
             console.log(event);
         });
         for (const b of su.benchmarks) {
-            const fn = b.bench()
-            bench.add({ name: b.name, fn });
+            const initBench = b.bench()
+            bench.add({
+                name: b.name,
+                fn: typeof initBench === "function"
+                    ? initBench
+                    : initBench.bench
+            });
+            if (initBench.onComplete) {
+                bench.on("complete", initBench.onComplete);
+            }
         }
         bench.run();
     }

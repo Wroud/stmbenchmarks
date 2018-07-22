@@ -2,7 +2,7 @@ import { createStore } from "redux";
 import { createSelector } from "reselect";
 import { counterReducer, deepCounterReducer, modifyReducer, normalizedReducer } from "./reduxReducers";
 
-export const reduxSuite = ({ variables: { normalizedCount, subscriberImpact }, initState, helpers: { createHeavySubscriber } }) => {
+export const reduxSuite = ({ variables: { normalizedCount }, initState, helpers: { subscribeChecker } }) => {
     const initStore = reducer => {
         const store = createStore(reducer);
         store.subscribe(() => { });
@@ -71,18 +71,27 @@ export const reduxSuite = ({ variables: { normalizedCount, subscriberImpact }, i
                 name: "normalized with subscribers",
                 bench() {
                     const store = createStore(normalizedReducer(initState.normalized()));
-                    const { heavySubscriber } = createHeavySubscriber(subscriberImpact);
+                    const { subscriber, getCalls } = subscribeChecker();
 
                     const add = id => ({ type: "add", payload: { id, text: "some news text" + id } });
                     const mod = id => ({ type: "modify", payload: { id, text: Math.random().toString() } });
                     for (let i = 0; i < normalizedCount; i++) {
                         store.dispatch(add(i));
-                        const memorizedSubcriber = createSelector((state: any) => state.news[i], heavySubscriber);
+                        const memorizedSubcriber = createSelector((state: any) => state.news[i], subscriber);
                         store.subscribe(() => memorizedSubcriber(store.getState()));
                     }
-                    return () => {
-                        for (let i = 0; i < normalizedCount; i++) {
-                            store.dispatch(mod(i));
+                    let invokeCount = 0;
+                    return {
+                        bench: () => {
+                            for (let i = 0; i < normalizedCount; i++) {
+                                store.dispatch(mod(i));
+                            }
+                            invokeCount += normalizedCount;
+                        },
+                        onComplete: () => {
+                            if (getCalls() < invokeCount) {
+                                throw new Error(`subscriber called: ${getCalls()}/${invokeCount}`);
+                            }
                         }
                     };
                 }

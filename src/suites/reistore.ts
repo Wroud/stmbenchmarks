@@ -1,7 +1,7 @@
 import { createStore, createSchema, createScope, Path } from "reistore";
 import { InstructionType } from "reistore/lib/enums/InstructionType";
 
-export const reistoreSuite = ({ variables: { normalizedCount, subscriberImpact }, initState, helpers: { createHeavySubscriber } }) => {
+export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpers: { subscribeChecker } }) => {
     const initStore = (state) => {
         return createStore(createSchema({ ...state }))
             .subscribe(() => { });
@@ -122,14 +122,9 @@ export const reistoreSuite = ({ variables: { normalizedCount, subscriberImpact }
                 bench() {
 
                     function* transformer(change, { add, remove }) {
-                        if ((change.type === InstructionType.add
-                            || change.type === InstructionType.remove)
+                        if (change.type === InstructionType.add
                             && change.in(newsScope.path)) {
-                            if (change.type === InstructionType.add) {
-                                yield add(showArgPath, change.value.id);
-                            } else if (change.type === InstructionType.remove) {
-                                yield remove(showScope.path, change.index);
-                            }
+                            yield add(showArgPath, change.value.id);
                         }
                         yield change;
                     }
@@ -142,21 +137,30 @@ export const reistoreSuite = ({ variables: { normalizedCount, subscriberImpact }
                     const store = createStore(schemaNormalized)
                         .subscribe(() => { });
 
-                    const { heavySubscriber } = createHeavySubscriber(subscriberImpact);
+                    const { subscriber, getCalls } = subscribeChecker();
                     store.batch(batch => {
                         for (let i = 0; i < normalizedCount; i++) {
                             batch.add(newsArgPath, { id: i, text: "some news text" + i }, i);
                             const hi = [i];
                             store.subscribe((state, changes) => {
                                 if (changes.some(path => path.in(textPathreal, hi))) {
-                                    heavySubscriber();
+                                    subscriber();
                                 }
                             });
                         }
                     });
-                    return () => {
-                        for (let i = 0; i < normalizedCount; i++) {
-                            store.set(textPathreal, Math.random().toString(), i);
+                    let invokeCount = 0;
+                    return {
+                        bench: () => {
+                            for (let i = 0; i < normalizedCount; i++) {
+                                store.set(textPathreal, Math.random().toString(), i);
+                            }
+                            invokeCount += normalizedCount;
+                        },
+                        onComplete: () => {
+                            if (getCalls() < invokeCount) {
+                                throw new Error(`subscriber called: ${getCalls()}/${invokeCount}`);
+                            }
                         }
                     };
                 }

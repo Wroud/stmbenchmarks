@@ -1,6 +1,10 @@
+export interface IBenchHandlers {
+    bench: () => void;
+    onComplete?: () => void;
+}
 export interface IBench {
     name: string;
-    bench: () => () => void;
+    bench: () => IBenchHandlers;
 }
 export interface ISuite {
     name: string;

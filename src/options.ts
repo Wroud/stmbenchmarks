@@ -1,5 +1,5 @@
 import { INormalizedState, IDeepCounterState, ICounterState } from "./interfaces/IState";
-import { createHeavySubscriber } from "./suites";
+import { subscribeChecker } from "./suites";
 
 export const initCounterStore = (): ICounterState => ({
     scope: {
@@ -26,11 +26,10 @@ export const initNormalizedState = (): INormalizedState => ({
 
 export const optionsDefault = {
     variables: {
-        normalizedCount: 5,
-        subscriberImpact: 1000
+        normalizedCount: 5
     },
     helpers: {
-        createHeavySubscriber
+        subscribeChecker
     },
     initState: {
         counter: initCounterStore,
