@@ -13,7 +13,7 @@ export function runBenchmark<
         var bench = new Suite(su.name, {
             delay: 0,
             maxTime: 1,
-            initCount: 1
+            initCount: 0
         });
         reporter(bench);
         bench.on('error', event => {

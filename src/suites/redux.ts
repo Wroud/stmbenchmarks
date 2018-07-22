@@ -24,14 +24,14 @@ export const reduxSuite = ({ variables: { normalizedCount }, initState, helpers:
             {
                 name: "modify",
                 bench() {
-                    const store = initStore(modifyReducer(initState.counter));
+                    const store = initStore(modifyReducer(initState.counter()));
                     return () => store.dispatch({ type: "init" });
                 }
             },
             {
                 name: "counter",
                 bench() {
-                    const store = initStore(counterReducer(initState.counter));
+                    const store = initStore(counterReducer(initState.counter()));
                     return () => {
                         store.dispatch({ type: "INCREMENT" });
                         store.dispatch({ type: "DECREMENT" });
@@ -56,7 +56,7 @@ export const reduxSuite = ({ variables: { normalizedCount }, initState, helpers:
             {
                 name: "normalized",
                 bench() {
-                    const store = initStore(normalizedReducer(initState.normalized));
+                    const store = initStore(normalizedReducer(initState.normalized()));
                     return () => {
                         for (let i = 0; i < normalizedCount; i++) {
                             store.dispatch({ type: "add", payload: { id: i, text: "some news text" + i } });
@@ -70,7 +70,7 @@ export const reduxSuite = ({ variables: { normalizedCount }, initState, helpers:
             {
                 name: "normalized with subscribers",
                 bench() {
-                    const store = createStore(normalizedReducer(initState.normalized));
+                    const store = createStore(normalizedReducer(initState.normalized()));
                     const { heavySubscriber } = createHeavySubscriber();
 
                     const add = id => ({ type: "add", payload: { id, text: "some news text" + id } });

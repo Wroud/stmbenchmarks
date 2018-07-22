@@ -1,12 +1,12 @@
 import { INormalizedState, IDeepCounterState, ICounterState } from "./interfaces/IState";
 import { createHeavySubscriber } from "./suites";
 
-export const initCounterStore: ICounterState = {
+export const initCounterStore = (): ICounterState => ({
     scope: {
         counter: 0
     }
-};
-export const deepState: IDeepCounterState = {
+});
+export const deepState = (): IDeepCounterState => ({
     scope0: {
         scope1: {
             scope2: {
@@ -18,15 +18,15 @@ export const deepState: IDeepCounterState = {
             }
         }
     }
-};
-export const initNormalizedState: INormalizedState = {
+});
+export const initNormalizedState = (): INormalizedState => ({
     news: {},
     show: []
-};
+});
 
 export const optionsDefault = {
     variables: {
-        normalizedCount: 20
+        normalizedCount: 5
     },
     helpers: {
         createHeavySubscriber

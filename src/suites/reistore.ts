@@ -2,7 +2,6 @@ import { createStore, createSchema, createScope, Path } from "reistore";
 import { InstructionType } from "reistore/lib/enums/InstructionType";
 
 export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpers: { createHeavySubscriber } }) => {
-
     const initStore = (state) => {
         return createStore(createSchema({ ...state }))
             .subscribe(() => { });
@@ -27,7 +26,7 @@ export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpe
                 name: "modify",
                 bench() {
                     const counter = Path.create<any, any>(f => f.scope.counter);
-                    const store = initStore(initState.counter);
+                    const store = initStore(initState.counter());
                     return () => {
                         store.set(counter, 1);
                     }
@@ -37,7 +36,7 @@ export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpe
                 name: "counter",
                 bench() {
                     const counter = Path.create<any, any>(f => f.scope.counter);
-                    const store = initStore(initState.counter);
+                    const store = initStore(initState.counter());
                     return () => {
                         store.batch(store => {
                             store.set(counter, v => v + 1);
@@ -52,7 +51,7 @@ export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpe
                 name: "counter with inject",
                 bench() {
                     const counter = Path.create<any, any>(f => f.scope.counter);
-                    const store = initStore(initState.counter);
+                    const store = initStore(initState.counter());
                     return () => {
                         store.batch(store => {
                             store.inject(({ scope: { counter: value } }, inject) => {
@@ -68,7 +67,7 @@ export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpe
             {
                 name: "counter deep",
                 bench() {
-                    const deepSchema = createSchema({ ...initState.deepCounter });
+                    const deepSchema = createSchema(initState.deepCounter());
                     const scopeSchema = createScope(deepSchema, f => f.scope0.scope1.scope2.scope3.scope4);
 
                     const counter = scopeSchema.joinPath(f => f.counter);
@@ -98,7 +97,7 @@ export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpe
                         }
                         yield change;
                     }
-                    const schemaNormalized = createSchema(initState.normalized, transformer);
+                    const schemaNormalized = createSchema(initState.normalized(), transformer);
                     const newsScope = createScope(schemaNormalized, (f: any) => f.news);
                     const showScope = createScope(schemaNormalized, (f: any) => f.show);
                     const newsArgPath = newsScope.joinPath(f => f["{}"]);
@@ -134,7 +133,7 @@ export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpe
                         }
                         yield change;
                     }
-                    const schemaNormalized = createSchema(initState.normalized, transformer);
+                    const schemaNormalized = createSchema(initState.normalized(), transformer);
                     const newsScope = createScope(schemaNormalized, (f: any) => f.news);
                     const showScope = createScope(schemaNormalized, (f: any) => f.show);
                     const newsArgPath = newsScope.joinPath(f => f["{}"]);
