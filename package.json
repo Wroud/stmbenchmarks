@@ -1,6 +1,6 @@
 {
   "name": "stmbenchmarks",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Benchmarks for js state managers like redux and etc.",
   "main": "lib/index.js",
   "module": "lib/index.js",

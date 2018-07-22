@@ -1,15 +1,21 @@
-export declare const reduxSuite: ({ variables: { normalizedCount }, initState, helpers: { createHeavySubscriber } }: {
+export declare const reduxSuite: ({ variables: { normalizedCount }, initState, helpers: { subscribeChecker } }: {
     variables: {
         normalizedCount: any;
     };
     initState: any;
     helpers: {
-        createHeavySubscriber: any;
+        subscribeChecker: any;
     };
 }) => {
     name: string;
-    benchmarks: {
+    benchmarks: ({
         name: string;
         bench(): () => void;
-    }[];
+    } | {
+        name: string;
+        bench(): {
+            bench: () => void;
+            onComplete: () => void;
+        };
+    })[];
 };

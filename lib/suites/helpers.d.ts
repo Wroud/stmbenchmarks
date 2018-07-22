@@ -1,4 +1,4 @@
-export declare const createHeavySubscriber: () => {
-    getSubscriberCalls: () => number;
-    heavySubscriber: () => any;
+export declare const subscribeChecker: (impact: number) => {
+    getCalls: () => number;
+    subscriber: () => void;
 };

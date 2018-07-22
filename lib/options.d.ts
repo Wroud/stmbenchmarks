@@ -7,9 +7,9 @@ export declare const optionsDefault: {
         normalizedCount: number;
     };
     helpers: {
-        createHeavySubscriber: () => {
-            getSubscriberCalls: () => number;
-            heavySubscriber: () => any;
+        subscribeChecker: (impact: number) => {
+            getCalls: () => number;
+            subscriber: () => void;
         };
     };
     initState: {

@@ -120,7 +120,6 @@ export const reistoreSuite = ({ variables: { normalizedCount }, initState, helpe
             {
                 name: "normalized with subscribers",
                 bench() {
-
                     function* transformer(change, { add, remove }) {
                         if (change.type === InstructionType.add
                             && change.in(newsScope.path)) {
