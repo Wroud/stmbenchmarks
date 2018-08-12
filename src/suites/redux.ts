@@ -25,7 +25,7 @@ export const reduxSuite = ({ variables: { normalizedCount }, initState, helpers:
                 name: "modify",
                 bench() {
                     const store = initStore(modifyReducer(initState.counter()));
-                    return () => store.dispatch({ type: "init" });
+                    return () => store.dispatch({ type: "modify" }); // any action
                 }
             },
             {

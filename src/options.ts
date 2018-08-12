@@ -6,7 +6,7 @@ export const initCounterStore = (): ICounterState => ({
         counter: 0
     }
 });
-export const deepState = (): IDeepCounterState => ({
+export const initDeepState = (): IDeepCounterState => ({
     scope0: {
         scope1: {
             scope2: {
@@ -33,7 +33,7 @@ export const optionsDefault = {
     },
     initState: {
         counter: initCounterStore,
-        deepCounter: deepState,
+        deepCounter: initDeepState,
         normalized: initNormalizedState
     }
 };
