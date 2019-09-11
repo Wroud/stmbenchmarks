@@ -88,7 +88,7 @@ export const reatomSuite = ({ variables: { normalizedCount }, initState, helpers
                         store.dispatch(decrement());
                         store.dispatch(increment());
                         store.dispatch(decrement());
-                        store.getState();
+                        store.getState(deep);
                     };
                 }
             },
