@@ -1,4 +1,4 @@
 import { runBenchmark } from "./bench";
-import { reistoreSuite, reduxSuite, noopSuite } from "./suites";
+import { reistoreSuite, reduxSuite, noopSuite, reatomSuite } from "./suites";
 
-runBenchmark([noopSuite, reduxSuite, reistoreSuite])
+runBenchmark([noopSuite, reduxSuite, reistoreSuite, reatomSuite])

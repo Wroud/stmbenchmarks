@@ -3,3 +3,4 @@ export * from "./noop";
 export * from "./redux";
 export * from "./reduxReducers";
 export * from "./reistore";
+export * from "./reatom";

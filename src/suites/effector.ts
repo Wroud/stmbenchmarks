@@ -1,9 +1,9 @@
-const {
-    createStore: ecS,
+import {
+    createStore as ecS,
     createEvent,
     createEffect,
     createStoreObject
-} = require("effector");
+} from "effector";
 
 const efSuite = ({ iterations, normalizedCount, initState, helpers: { createHeavySubscriber } }) => {
     suite("effector", function () {
